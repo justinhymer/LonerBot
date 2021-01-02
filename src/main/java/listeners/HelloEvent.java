@@ -1,11 +1,17 @@
 package listeners;
 
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
 public class HelloEvent extends ListenerAdapter {
+
+    static Logger LOGGER = LoggerFactory.getLogger(HelloEvent.class);
+
     final String KEYWORD1 = "!lonerbot";
     final String KEYWORD2 = "!llonerbot";
     final String KEYWORD3 = "!lb";
@@ -14,40 +20,89 @@ public class HelloEvent extends ListenerAdapter {
     final String KEYWORD6 = "!lonabutt";
     final String KEYWORD7 = "!lonerboner";
 
+    String lastUsedKeyword = "";
+
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        //handy variables for saving
+        String username;
+        String channelName
+
+
         String messageSent = event.getMessage().getContentRaw();
 
+        //discord bot is now awake and decides how to respond
         if (messageContainsKeyword(messageSent)) {
+            //initial touches
+            messageSent = messageInitialTouches(event, messageSent);
+
+
             //analyze
+            //What is being asked?
+            //Based on input, what should I respond with?
+            //am I x, is x v,
 
             //process
+            String message = processMessage();
 
             //output
-            sendMessage(event);
-        }
-        //otherwise ignore it
-        else {
-            //do nothing
+            sendMessage(event, message);
         }
     }
 
+    /**
+     * Cleanup before message is further processed
+     * <p>
+     * 1. remove keyword from the message "!lonerbot"
+     * 2. convert message to lowercase
+     * 3. saves some neat variables for us to use later.
+     *
+     * @param event
+     */
+    private String messageInitialTouches(GuildMessageReceivedEvent event, String messageSent) {
+        String username;
+        TextChannel channel;
+        //initial touches
+        removeKeywordFromMessage(messageSent);
+        messageSent = messageSent.toLowerCase();
+
+        //we'll save some quick variables for easy use later like name, channel, etc
+        channel = event.getChannel();
+        try {
+            username = event.getMember().getEffectiveName();
+        } catch (NullPointerException nullException) {
+            LOGGER.error(nullException.getMessage());
+            LOGGER.error(nullException.getCause().toString());
+            //todo: if error, maybe supplement with random insult name
+            username = "bitch";
+        }
+        return messageSent;
+    }
+
+    private void removeKeywordFromMessage(String message) {
+        message = message.replace(lastUsedKeyword, "");
+    }
+
+    private String processMessage() {
+        return "yes";
+    }
+
+    //can we also make this remember the keyword that was used?
     public boolean messageContainsKeyword(String message) {
         String[] keywordArray = {KEYWORD1, KEYWORD2, KEYWORD3, KEYWORD4, KEYWORD5, KEYWORD6, KEYWORD7};
         for (int i = 0; i < keywordArray.length; i++) {
-            //check if message contains keyword
             if (message.toLowerCase().contains(keywordArray[i])) {
+                //save the keyword to a local variable so we know what keyword to remove later
+                lastUsedKeyword = keywordArray[i];
                 return true;
-            } else {
-                // do nothing
             }
         }
         return false;
     }
 
     //todo
-    private void sendMessage(GuildMessageReceivedEvent event) {
-
+    private void sendMessage(GuildMessageReceivedEvent event, String message) {
+        event.getChannel().sendMessage(message);
     }
 
     private String whosRetarded(String message) {
@@ -128,22 +183,3 @@ public class HelloEvent extends ListenerAdapter {
         return random.nextBoolean();
     }
 }
-
-
-//            switch (user.toLowerCase()) {
-//                case "dumb":
-//                    event.getChannel().sendMessage("You're clearly autistic. don't talk to me anh.").queue();
-//                    break;
-//                case "j-hymz":
-//                    event.getChannel().sendMessage("anh is retarded").queue();
-//                    break;
-//                case "probably josi":
-//                    event.getChannel().sendMessage("I'm still a bit hesitant with asians. Wanna race for street cred?").queue();
-//                    break;
-//                case "jerrid":
-//                    event.getChannel().sendMessage("ur dick is small jerrid").queue();
-//                    break;
-//                default:
-//                    event.getChannel().sendMessage("shut the fuck up anh").queue();
-//                    break;
-//            }
