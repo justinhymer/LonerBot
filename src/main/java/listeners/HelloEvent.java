@@ -26,7 +26,7 @@ public class HelloEvent extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         //handy variables for saving
         String username;
-        String channelName
+        String channelName;
 
 
         String messageSent = event.getMessage().getContentRaw();
