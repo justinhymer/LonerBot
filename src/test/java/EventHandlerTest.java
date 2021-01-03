@@ -1,4 +1,4 @@
-import listeners.HelloEvent;
+import listeners.EventHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,15 +8,15 @@ import org.slf4j.LoggerFactory;
 
 
 @RunWith(JUnit4.class)
-public class HelloEventTest {
+public class EventHandlerTest {
 
-    static Logger LOGGER = LoggerFactory.getLogger(HelloEventTest.class);
+    static Logger LOGGER = LoggerFactory.getLogger(EventHandlerTest.class);
 
-    HelloEvent testSubect;
+    EventHandler testSubect;
 
     @Before
     public void before() {
-        testSubect = new HelloEvent();
+        testSubect = new EventHandler();
     }
 
     @Test
