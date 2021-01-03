@@ -9,7 +9,7 @@ public class HeadsOrTails {
     GuildMessageReceivedEvent event;
     final String defaultResponse = "idk";
 
-    public HeadsOrTails(GuildMessageReceivedEvent event) {
+    public HeadsOrTails() {
         this.event = event;
     }
 

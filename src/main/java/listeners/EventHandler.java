@@ -1,5 +1,6 @@
 package listeners;
 
+import actions.CallSomeoneAName;
 import actions.HeadsOrTails;
 import actions.IsAction;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -17,7 +18,7 @@ public class EventHandler extends ListenerAdapter {
     final String KEYWORD3 = "!lb";
     final String KEYWORD4 = "!lbot";
     final String KEYWORD5 = "!lonarbot";
-    final String KEYWORD6 = "!lonabutt";
+    final String KEYWORD6 = "!lonerbutt";
     final String KEYWORD7 = "!lonerboner";
     String lastUsedKeyword = "";
 
@@ -30,29 +31,29 @@ public class EventHandler extends ListenerAdapter {
 
         //discord bot is now awake and decides how to respond
         if (messageContainsKeyword(messageSent)) {
-            messageSent = performInitialOperations(event, messageSent);
-            String response = formulateMessage(event);
+            String response = formulateMessage(event, performInitialOperations(event, messageSent));
             sendMessage(event, response);
         }
     }
 
-    private String formulateMessage(GuildMessageReceivedEvent event) {
-        String messageSent = event.getMessage().getContentRaw();
+    private String formulateMessage(GuildMessageReceivedEvent event, String messageSent) {
         String formulatedMessage = "";
 
         switch (determineAction(messageSent)) {
             //Is
             case 1:
-                IsAction isAction = new IsAction(event);
+                IsAction isAction = new IsAction(messageSent);
                 formulatedMessage = isAction.getResponse();
                 break;
             //headsortails
             case 2:
-                HeadsOrTails headsOrTails = new HeadsOrTails(event);
+                HeadsOrTails headsOrTails = new HeadsOrTails();
                 formulatedMessage = headsOrTails.getResponse();
                 break;
             //call
             case 3:
+                CallSomeoneAName callSomeoneAName = new CallSomeoneAName(messageSent);
+                formulatedMessage = callSomeoneAName.callSomeoneAName();
                 break;
             //nf error
             case 4:
@@ -141,7 +142,7 @@ public class EventHandler extends ListenerAdapter {
     }
 
     private void sendMessage(GuildMessageReceivedEvent event, String message) {
-        event.getChannel().sendMessage(message);
+        event.getChannel().sendMessage(message).queue();
     }
 
 

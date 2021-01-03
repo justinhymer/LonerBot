@@ -2,51 +2,56 @@ package actions;
 
 import java.util.Random;
 
-/**
- * IsAction does the following
- * "is Justin gay?" - input
- * "Yeah, justin is gay" - output
- */
-public class IsAction {
+public class CallSomeoneAName {
     String message;
 
-    //CONSTRUCTOR
-    public IsAction(String message) {
-        this.message = message;
+    public CallSomeoneAName(String updatedMessage) {
+        this.message = updatedMessage;
     }
 
-    public String getResponse() {
-        String defaultResponse = "";
+    //"call justin gay"
+    //todo: account for tags coming in "@"
+    public String callSomeoneAName() {
+        String defaultResponse = "nah";
         String response = defaultResponse;
 
         StringBuilder stringBuilder = new StringBuilder();
 
         //get name
-        String name = whosRetarded(message);
+        String name = whosName(message);
         //IS or IS not
-        String isOrIsNot = isOrIsNot();
+        String ur = "ur";
         //adjective
-        String adjective = whatIsTheAdjective(message, whosRetarded(message));
+        String adjective = whatIsTheAdjective(message, whosName(message));
+
+        /// 75/24 if it actually goes through or not. might turn back on them
+        if (fiftyfifty()) {
+            if (fiftyfifty()) {
+                //generate alternate response
+                //"no ur ADJECTIVE"
+            }
+        }
 
         //put those all together in a nice string
         stringBuilder.append(name);
         stringBuilder.append(" ");
-        stringBuilder.append(isOrIsNot);
+        stringBuilder.append(ur);
         stringBuilder.append(" ");
         stringBuilder.append(adjective);
         //return
         return stringBuilder.toString();
     }
 
-    private String whatIsTheAdjective(String message, String person) {
+    private String whatIsTheAdjective(String message, String personsName) {
         StringBuilder stringBuilder = new StringBuilder();
         String finalName;
-        int index = message.indexOf(person);
-        int adjectiveIndex = index + person.length() + 1;
+
+        int charIndexOfName = message.indexOf(personsName);
+        //this gets us to the index of the adjective
+        int adjectiveIndex = charIndexOfName + personsName.length() + 1;
+
         boolean active = true;
-
         int indexChar = adjectiveIndex;
-
         StringBuilder collectedLetters = new StringBuilder();
         try {
             while (active) {
@@ -65,11 +70,11 @@ public class IsAction {
         return stringBuilder.toString();
     }
 
-    private String whosRetarded(String message) {
+    private String whosName(String message) {
         String name = "they're";
         //find char position of "is"
-        int charPosofIs = message.indexOf("is");
-        int startingCharPosOfName = charPosofIs + 3;
+        int charPosofIs = message.indexOf("call");
+        int startingCharPosOfName = charPosofIs + 5;
         //go until space
         boolean haventEncounteredSpace = true;
 
